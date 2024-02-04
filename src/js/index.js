@@ -38,7 +38,7 @@ form.addEventListener('submit', (e) => {
             .finally(() => {
                 loader.style.display = 'none';
             });
-    }, 2000);
+    }, 1500);
     
     e.target.reset();
 });
