@@ -39,6 +39,7 @@ form.addEventListener('submit', (e) => {
                 loader.style.display = 'none';
             });
     }, 2000);
+    
     e.target.reset();
 });
 
