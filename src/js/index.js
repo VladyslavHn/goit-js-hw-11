@@ -2,15 +2,25 @@ import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-let lightbox;
 
 const form = document.querySelector('.search-form');
 const list = document.querySelector('.pictures-list');
 const loader = document.querySelector('.loader');
 
+const lightbox = new SimpleLightbox('.gallery-card a.gallary-card-link', {
+            captionsData: 'alt',
+            captionDelay: 250,
+        });
+
 form.addEventListener('submit', (e) => {
     e.preventDefault();
+    
     const searchImg = e.target.elements.input.value;
+    
+    if (searchImg.trim('') === '') {
+        return;
+    }
+
     loader.style.display = 'flex';
 
     if (lightbox) {
@@ -22,7 +32,7 @@ form.addEventListener('submit', (e) => {
         getImg(searchImg)
             .then(data => {
                 render(data.hits);
-
+                lightbox.refresh();
                 if (data.hits.length === 0) {
                     iziToast.error({
                         message: 'Sorry, there are no images matching your search query. Please try again!',
@@ -38,7 +48,7 @@ form.addEventListener('submit', (e) => {
             .finally(() => {
                 loader.style.display = 'none';
             });
-    }, 1500);
+    }, 500);
     
     e.target.reset();
 });
@@ -90,15 +100,7 @@ function render(imgs) {
 </li>`;
     }).join('');
 
-    list.innerHTML = markup;
-    if (lightbox) {
-        lightbox.refresh();
-    } else {
-        lightbox = new SimpleLightbox('.gallery-card a.gallary-card-link', {
-            captionsData: 'alt',
-            captionDelay: 250,
-        });
-    }
+    list.insertAdjacentHTML('beforeend', markup);
 }
 
 
